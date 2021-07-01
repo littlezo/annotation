@@ -14,6 +14,7 @@ declare(strict_types=1);
  * @license  https://github.com/littlezo/MozillaPublicLicense/blob/main/LICENSE
  *
  */
+
 namespace littler\annotation;
 
 use Doctrine\Common\Annotations\AnnotationReader;
@@ -28,6 +29,7 @@ class Service extends \think\Service
 	use InteractsWithRoute;
 	use InteractsWithInject;
 	use InteractsWithModel;
+	use InteractsWithDocs;
 
 	/** @var Reader */
 	protected $reader;
@@ -45,6 +47,8 @@ class Service extends \think\Service
 		//模型注解方法提示
 		$this->detectModelAnnotations();
 		// dd($this);
+        // 注册 api文档
+		$this->registerAnnotationDocs();
 	}
 
 	public function register()

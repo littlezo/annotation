@@ -15,83 +15,59 @@ declare(strict_types=1);
  *
  */
 
-namespace littler\annotation\route;
+namespace littler\annotation\docs;
 
 use Doctrine\Common\Annotations\Annotation;
 
 abstract class Rule extends Annotation
 {
 	/**
-	 * @var string|array
+	 * 标题.
+	 * @var string
 	 */
-	public $middleware;
+	public $title;
 
 	/**
-	 * 后缀
+	 * 版本.
 	 *
+	 * @var string|float
+	 */
+	public $version;
+
+	/**
+	 * 名称.
 	 * @var string
 	 */
-	public $ext;
+	public $name;
 
 	/**
+	 * 组.
 	 * @var string
 	 */
-	public $deny_ext;
+	public $group;
 
 	/**
-	 * @var bool
+	 * 成功
+	 * @var array|object
 	 */
-	public $https;
+	public $success;
 
 	/**
-	 * @var string
+	 * 失败.
+	 * @var array|object
 	 */
-	public $domain;
+	public $error;
 
 	/**
-	 * @var bool
+	 * 参数.
+	 * @var array|object
 	 */
-	public $complete_match;
+	public $param;
 
-	/**
-	 * @var string|array
-	 */
-	public $cache;
-
-	/**
-	 * @var bool
-	 */
-	public $ajax;
-
-	/**
-	 * @var bool
-	 */
-	public $pjax;
-
-	/**
-	 * @var bool
-	 */
-	public $json;
-
-	/**
-	 * @var array
-	 */
-	public $filter;
-
-	/**
-	 * @var array
-	 */
-	public $append;
-
-	/**
-	 * @var bool
-	 */
-	public $ignore_verify;
-
-	public function getOptions()
+	public function getRule()
 	{
 		return array_intersect_key(get_object_vars($this), array_flip([
-			'middleware', 'ext', 'deny_ext', 'https', 'domain', 'complete_match', 'cache', 'ajax', 'pjax', 'json', 'filter', 'append', 'ignore_verify',
+			'title', 'version', 'name', 'group', 'success', 'error', 'param',
 		]));
 	}
 }

@@ -14,18 +14,17 @@ declare(strict_types=1);
  * @license  https://github.com/littlezo/MozillaPublicLicense/blob/main/LICENSE
  *
  */
+
 namespace littler\annotation;
 
 use Doctrine\Common\Annotations\Reader;
 use littler\annotation\route\Group;
 use littler\annotation\route\Middleware;
 use littler\annotation\route\Model;
-use littler\annotation\route\Resource;
+use littler\annotation\route\Resource as Resources;
 use littler\annotation\route\Validate;
-use littler\facade\FileSystem;
 use ReflectionClass;
 use ReflectionMethod;
-use Symfony\Component\Finder\Finder;
 use think\App;
 use think\event\RouteLoaded;
 
@@ -45,106 +44,6 @@ trait InteractsWithRoute
 	protected $route;
 
 	/**
-	 * packages psr4.
-	 *
-	 * @return mixed
-	 */
-	protected function psr4()
-	{
-		$autoload_psr4 = include app()->getRootPath() . ('vendor/composer/autoload_psr4.php');
-		$root_path = app()->getRootPath();
-
-		foreach ($autoload_psr4 as &$item) {
-			if (is_array($item)) {
-				foreach ($item as &$value) {
-					$value = str_replace($root_path, '', $value);
-				}
-			} else {
-				$item = str_replace($root_path, '', $item);
-			}
-		}
-		return $autoload_psr4;
-	}
-
-	/**
-	 * 获取根命名空间.
-	 * @param $module
-	 * @param mixed $path
-	 */
-	protected function getRootNamespace($path): ?string
-	{
-		$psr4 = $this->psr4();
-		$namespace = null;
-		foreach ($psr4 as $_namespace => $item) {
-			foreach ($item as $_path) {
-				if (! is_bool(stripos($path, $_path))) {
-					$namespace = $_namespace;
-					continue;
-				}
-			}
-		}
-		return $namespace;
-	}
-
-	/**
-	 * 获取所有class.
-	 *
-	 * @param string $layer 层名 controller model ...
-	 * @throws \ReflectionException
-	 * @return \ReflectionClass
-	 */
-	protected function getAllClass()
-	{
-		$class_file = iterator_to_array(
-			Finder::create()->files()->ignoreUnreadableDirs(true)->ignoreDotFiles(true)->in($this->app->getRootPath())->sortByName(),
-			false
-		);
-		$class_list = [];
-		foreach ($class_file as $item) {
-			$path = $item->getPath();
-			$relative_path = str_replace(root_path(), '', $path);
-			$pos = stripos($relative_path, $this->app->config->get('route.controller_layer'));
-			$file_name = $item->getFilename();
-			if (! $pos) {
-				continue;
-			}
-			if ($item->getExtension() !== 'php') {
-				continue;
-			}
-			$namespace = $this->getRootNamespace($relative_path) ?? false;
-			if (! $namespace) {
-				continue;
-			}
-			$module_namespace = substr(str_replace(['/', '\\\\'], '\\', $relative_path), (int) strpos(str_replace(['/', '\\\\'], '\\', $relative_path), $namespace));
-			$is_package = stripos($relative_path, 'src');
-			if ($is_package) {
-				$module_namespace = $namespace . substr(str_replace(['/', '\\\\'], '\\', $relative_path), $is_package + 4);
-			}
-			$is_test = stripos($relative_path, 'test');
-			$is_tests = stripos($relative_path, 'tests');
-			if ($is_test || $is_tests) {
-				continue;
-			}
-			if (stripos($relative_path, 'laravel')) {
-				continue;
-			}
-			$class_name = str_replace('.php', '', $file_name);
-			$class = $module_namespace . '\\' . $class_name;
-			try {
-				if (class_exists($class)) {
-					$class_list[] = [
-						$class => $relative_path . DIRECTORY_SEPARATOR . $file_name,
-					];
-				}
-			} catch (\Throwable $t) {
-				continue;
-			}
-		}
-		// dd($class_list);
-		return $class_list;
-	}
-
-	/**
 	 * 注册注解路由.
 	 */
 	protected function registerAnnotationRoute()
@@ -155,16 +54,6 @@ trait InteractsWithRoute
 				foreach ($this->getAllClass() as $class_map) {
 					$this->parse($class_map);
 				}
-				// $directories = [];
-				// dd($this->getAllClass());
-				// foreach (Finder::create()->in($this->app->getRootPath())->directories()->ignoreUnreadableDirs()->sortByName() as $dir) {
-				// 	if (strripos($dir->getPathname(), $this->app->config->get('route.controller_layer'))) {
-				// 		$directories[] = $dir->getPathname();
-				// 		if (is_dir($dir->getPathname())) {
-				// 			$this->scanDir($dir->getPathname());
-				// 		}
-				// 	}
-				// }
 			});
 		}
 	}
@@ -176,7 +65,7 @@ trait InteractsWithRoute
 		// dd($class_map);
 		foreach ($class_map as $class => $path) {
 			# code...
-			// dd($class);
+
 			$refClass = new ReflectionClass($class);
 
 			// dd($refClass);
@@ -185,8 +74,8 @@ trait InteractsWithRoute
 			$callback = null;
 
 			//类
-			/** @var resource $resource */
-			if ($resource = $this->reader->getClassAnnotation($refClass, Resource::class)) {
+			/** @var Resources $resource */
+			if ($resource = $this->reader->getClassAnnotation($refClass, Resources::class)) {
 				//资源路由
 				$callback = function () use ($class, $resource) {
 					$this->route->resource($resource->value, $class)
@@ -210,7 +99,8 @@ trait InteractsWithRoute
 					$routeGroup->option($group->getOptions());
 				}
 
-				$routeGroup->middleware($routeMiddleware);
+				$routeGroup->middleware($routeMiddleware[0] ?? null, $routeMiddleware[1] ?? null);
+			// dd($routeMiddleware);
 			} else {
 				if ($callback) {
 					$callback();
@@ -229,10 +119,11 @@ trait InteractsWithRoute
 					$rule = $routeGroup->addRule($route->value, "{$class}@{$refMethod->getName()}", $route->method);
 
 					$rule->option($route->getOptions());
-
+					$rule->middleware($routeMiddleware[0] ?? null, $routeMiddleware[1] ?? null);
+					// dd($rule);
 					//中间件
 					if ($middleware = $this->reader->getMethodAnnotation($refMethod, Middleware::class)) {
-						$rule->middleware($middleware->value);
+						$rule->middleware($middleware->value[0] ?? null, $middleware->value[1] ?? null);
 					}
 					//设置分组别名
 					if ($group = $this->reader->getMethodAnnotation($refMethod, Group::class)) {

@@ -51,24 +51,18 @@ trait InteractsWithRoute
 		if ($this->app->config->get('annotation.route.enable', true)) {
 			$this->app->event->listen(RouteLoaded::class, function () {
 				$this->route = $this->app->route;
-				foreach ($this->getAllClass() as $class_map) {
-					$this->parse($class_map);
-				}
+				// dd($this->getAllClass());
+				$this->parse($this->getClassMap());
+				// foreach ($this->getAllClass() as $class_map) {
+				// }
 			});
 		}
 	}
 
 	protected function parse($class_map)
 	{
-		// dd($dir);
-		// $class_file = FileSystem::allFiles(root_path());
-		// dd($class_map);
 		foreach ($class_map as $class => $path) {
-			# code...
-
 			$refClass = new ReflectionClass($class);
-
-			// dd($refClass);
 			$routeGroup = false;
 			$routeMiddleware = [];
 			$callback = null;
@@ -100,7 +94,6 @@ trait InteractsWithRoute
 				}
 
 				$routeGroup->middleware($routeMiddleware[0] ?? null, $routeMiddleware[1] ?? null);
-			// dd($routeMiddleware);
 			} else {
 				if ($callback) {
 					$callback();
@@ -114,13 +107,11 @@ trait InteractsWithRoute
 			foreach ($refClass->getMethods(\ReflectionMethod::IS_PUBLIC) as $refMethod) {
 				/** @var Route $route */
 				if ($route = $this->reader->getMethodAnnotation($refMethod, Route::class)) {
-					// dd($route);
 					//注册路由
 					$rule = $routeGroup->addRule($route->value, "{$class}@{$refMethod->getName()}", $route->method);
 
 					$rule->option($route->getOptions());
 					$rule->middleware($routeMiddleware[0] ?? null, $routeMiddleware[1] ?? null);
-					// dd($rule);
 					//中间件
 					if ($middleware = $this->reader->getMethodAnnotation($refMethod, Middleware::class)) {
 						$rule->middleware($middleware->value[0] ?? null, $middleware->value[1] ?? null);

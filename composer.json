@@ -12,7 +12,8 @@
     "topthink/framework": "^6.0",
     "doctrine/annotations": "^1.0",
     "php-di/phpdoc-reader": "^2.0",
-    "symfony/class-loader": "^3.0"
+    "symfony/class-loader": "^3.0",
+    "erusev/parsedown": "^1.0"
   },
   "require-dev": {
     "topthink/think-ide-helper": "^v1.0"

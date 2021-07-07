@@ -41,33 +41,96 @@ abstract class Rule extends Annotation
 	public $name;
 
 	/**
+	 * 应用层.
+	 * @var string
+	 */
+	public $layer;
+
+	/**
+	 * 模块.
+	 * @var string
+	 */
+	public $module;
+
+	/**
 	 * 组.
 	 * @var string
 	 */
 	public $group;
 
 	/**
-	 * 成功
-	 * @var array|object
+	 * 路径.
+	 * @var string
 	 */
-	public $success;
+	public $path;
+
+	/**
+	 * 方法.
+	 * @var string
+	 */
+	public $method;
+
+	/**
+	 * 请求头.
+	 * @var string
+	 */
+	public $headers;
+
+	/**
+	 * 授权.
+	 * @var string
+	 */
+	public $auth;
+
+	/**
+	 * 描述.
+	 * @var string
+	 */
+	public $desc;
+
+	/**
+	 * 成功
+	 * @var array
+	 */
+	public $success = [
+		'code' => 200,
+		'type' => 'success',
+		'message' => '成功消息||success',
+		'timestamp' => 1234567890,
+		'result' => [
+			'encryptData' => '加密数据自行解密',
+		],
+	];
 
 	/**
 	 * 失败.
-	 * @var array|object
+	 * @var array
 	 */
-	public $error;
+	public $error = [
+		'code' => 500,
+		'message' => '错误消息',
+		'type' => 'error',
+		'result' => '',
+		'timestamp' => 1234567890,
+	];
 
 	/**
 	 * 参数.
-	 * @var array|object
+	 * @var array
 	 */
-	public $param;
+	public $param = [];
+
+	/**
+	 * 方法合集.
+	 * @var array
+	 */
+	public $methods = [];
 
 	public function getRule()
 	{
 		return array_intersect_key(get_object_vars($this), array_flip([
-			'title', 'version', 'name', 'group', 'success', 'error', 'param',
+			'title', 'version', 'name', 'path', 'method', 'headers', 'auth', 'layer',
+			'group', 'module', 'desc', 'success', 'error', 'param', 'methods',
 		]));
 	}
 }

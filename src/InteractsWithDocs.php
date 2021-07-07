@@ -23,6 +23,7 @@ use littler\annotation\route\Group;
 use ReflectionClass;
 use think\App;
 use think\event\HttpRun;
+use think\facade\Cache;
 
 /**
  * Trait InteractsWithDocs.
@@ -31,65 +32,78 @@ use think\event\HttpRun;
  * @property Reader $reader
  * @property
  */
+/**
+ * 合并两个多维数组.
+ * @param array $a1
+ * @param array $a2
+ * @return array
+ */
+function array_merge_many($a1, $a2)
+{
+	$arr = array_merge($a1, $a2);
+	foreach ($arr as $k => $v) {
+		if (is_array($v) && isset($a1[$k]) && isset($a2[$k])) {
+			$arr[$k] = array_merge_many($a1[$k], $a2[$k]);
+		}
+	}
+	return $arr;
+}
 trait InteractsWithDocs
 {
 	use InteractsWithCustom;
 
 	/**
-	 * 注册注解路由.
+	 * 注册注解文档.
 	 */
 	protected function registerAnnotationDocs()
 	{
 		$this->app->event->listen(HttpRun::class, function () {
-			$this->route = $this->app->route;
-			$docs = [];
-			foreach ($this->getAllClass() as $class_map) {
-				$docs[]=$this->parseDocs($class_map);
-			}
-			// dd($docs);
+			Cache::set('apiDocs', $this->parseDocs($this->getClassMap()));
 		});
 	}
 
 	protected function parseDocs($class_map)
 	{
-		// dd($class_map);
-		$docs = [];
+		$apiDocs = [];
 		foreach ($class_map as $class => $path) {
 			$refClass = new ReflectionClass($class);
-			//类
-			/** @var Group $group */
-			if ($group = $this->reader->getClassAnnotation($refClass, Group::class)) {
-				// 文档信息
-				$docs[$group->value]= [];
+			/**
+			 * 组.
+			 * @var Group $group
+			 */
+			$group = $this->reader->getClassAnnotation($refClass, Group::class);
+			/**
+			 * 类文档.
+			 * @var ApiDocs $apiClassDocs
+			 */
+			$item = [];
+			if ($apiClassDocs = $this->reader->getClassAnnotation($refClass, ApiDocs::class)) {
+				$item = array_merge_many($apiClassDocs->getRule(), $apiClassDocs->value);
+				$apiDocs[$item['layer'] ?: 'other'][$item['module'] ?: 'default'][$item['group'] ?: $group->value] = array_merge_many($apiClassDocs->getRule(), $apiClassDocs->value);
+				$apiDocs[$item['layer'] ?: 'other'][$item['module'] ?: 'default'][$item['group'] ?: $group->value]['group'] =  $apiClassDocs->value['group'] ?? 'default';
 			}
-
-			/** @var ApiDocs $apiDocs */
-			if ($apiDocs = $this->reader->getClassAnnotation($refClass, ApiDocs::class)) {
-				//路由信息
-				// dd($apiDocs);
-				$docs[$group->value]['class'] = $apiDocs->getRule();
-				$docs[$group->value]['class']['name'] =  $group->value;
-				$docs[$group->value]['class']['group'] =  $group->value;
-			}
-
-			// dd($docs);
-
 			//方法
 			foreach ($refClass->getMethods(\ReflectionMethod::IS_PUBLIC) as $refMethod) {
-				$methods =[];
-				/* @var ApiDocs $apiMethodDocs */
+				/**
+				 * 方法文档.
+				 * @var ApiDocs $apiMethodDocs
+				 */
 				if ($apiMethodDocs = $this->reader->getMethodAnnotation($refMethod, ApiDocs::class)) {
-					//文档信息
-					$methods = $apiMethodDocs;
-				}
-				/* @var Route $route */
-				if ($route = $this->reader->getMethodAnnotation($refMethod, Route::class)) {
-					// 路由信息
-					// $methods['path'] = $route->value;
+					/**
+					 * 路由信息.
+					 * @var Route $route
+					 */
+					$method_docs = [];
+					$method_docs = array_merge_many($apiMethodDocs->getRule(), $apiMethodDocs->value);
+					if ($route = $this->reader->getMethodAnnotation($refMethod, Route::class)) {
+						$method_docs['path']=$route->value;
+						$method_docs['auth']=$route->ignore_verify??false;
+						$method_docs['method']=$route->method;
+					}
+					$apiDocs[$item['layer'] ?: 'other'][$item['module'] ?: 'default'][$item['group'] ?: $group->value]['methods'][] = $method_docs;
 				}
 			}
-			$docs['methods'][] = $methods;
 		}
-		return $docs;
+		return $apiDocs;
 	}
 }

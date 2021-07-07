@@ -1,0 +1,216 @@
+code{
+	font-family: Consolas, verdana, arial;
+	background-color: #e0e0e0;
+}
+
+/** {*/
+/*	margin: 0;*/
+/*	padding: 0;*/
+/*}*/
+
+.bigtitle {
+	font-size: 2rem;
+	text-align:center;
+	color: #2b303b
+}
+.modifytime {
+	font-size: 12px;
+	color: #2b303b
+}
+
+h3 {
+	margin: 0.8rem;
+}
+
+h5 {
+	margin: 0.5rem;
+}
+
+.in {
+	padding-left: 20px;
+	margin-bottom: 5px;
+	margin-top: 2px;
+	/*border: 1px solid gray;*/
+}
+
+.dir{
+	/*color: #2b303b;*/
+	font-size: 18px;
+}
+
+.file {
+	/*color: #333333;*/
+	font-size: 14px;
+}
+
+#sidebar p {margin: 3px 0;}
+
+@media screen and (min-width: 800px) {
+	#container {
+		display: -webkit-flex; /* Safari */
+		display: flex;
+		flex-direction:row;
+		flex-wrap: nowrap;
+		justify-content: center;
+		align-items: stretch;
+		/*overflow: auto;*/
+	}
+
+	#sidebar {
+		order: 0;
+		max-width: 200px;
+		min-width: 150px;
+		overflow: scroll;
+		padding-left: 0.5rem;
+		background-color: #F6F6F6;
+		color: #404c57;
+		padding-top: 0.5rem;
+	}
+	#sidebar::-webkit-scrollbar {display: none;}
+
+	#content {
+		order:1;
+		flex-grow:1;
+		overflow: scroll;
+		padding-left: 1rem;
+		padding-top: 0.5rem;
+	}
+	#content::-webkit-scrollbar {display: none;}
+
+	#list_note_icon {
+		display: none;
+	}
+}
+
+@media screen and (max-width: 800px) {
+	#container {
+		width: 100%;
+	}
+
+	#sidebar {
+		padding: 0;
+		margin: 0;
+		background-color: #fbfbfb;
+		color: #404c57;
+		width: 100vw;
+		height: 100vh;
+		overflow: auto;
+		opacity: 0.95;
+		position: fixed;/*这里一定要设置*/
+		top: 0;
+		right: 0;
+		left: 0;
+		bottom: 0;
+		z-index: 500;
+		-webkit-transition: .5s ease-in-out;/* css的transition允许css的属性值在一定的时间内从一个状态平滑的过渡到另一个状态 */
+		-moz-transition: .5s ease-in-out;/*这里为了兼容其他浏览器*/
+		-o-transition: .5s ease-in-out;
+	}
+
+	#content {
+		width: 100%;
+		padding: 0.5rem;
+	}
+
+	.root-title {
+		padding-left: 0.5rem;
+	}
+}
+
+
+table {
+	width: 90%;
+	/* font-family: verdana,arial,sans-serif; */
+	font-family: Consolas,verdana,arial;
+	font-size:14px;
+	color:#333333;
+	border-width: 1px;
+	border-color: #ddd;
+	border-collapse: collapse;
+}
+
+table th {
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #ddd;
+	background-color: #f8f8f8;
+}
+table td {
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #ddd;
+	background-color: #ffffff;
+}
+
+tr:hover td{
+	/*background-color:#c0d2ec;*/
+	background-color:#f1f5fb;
+}
+
+blockquote {
+	display: block;
+	margin: 5px 5px;
+	box-shadow: inset 4px 0 #ff9900;
+	text-align: left;
+}
+
+blockquote p {
+	margin: 5px 5px;
+	padding: 0 10px;
+}
+
+
+/** 右下角跳转按钮 跳转到列表 */
+#list_note_icon
+{
+	position: fixed;
+	bottom: 7%;
+	right: 8%;
+	z-index: 900;
+	background: #eee;
+	width: 50px;
+	height: 50px;
+	border-radius: 25px;
+	/*box-shadow: 2px 2px 2px #888888;*/
+	opacity:0.7 ;
+}
+
+#list_note_icon:before
+{
+	content: "";
+	display:block;
+	background:#555;
+	position:absolute;
+	height:2px;
+	width:28px;
+	top:13px;
+	left:11px;
+	box-shadow:0 10px #555, 0 20px #555, 0 30px #555;
+	-webkit-box-shadow:0 8px #555, 0 16px #555, 0 24px #555;
+	-moz-box-shadow:0 10px #555, 0 20px #555, 0 30px #555;
+}
+
+footer {
+	margin-top: 100px;
+	height:32px;
+	line-height: 32px;
+	text-align: center;
+	font-size: 12px;
+}
+
+.panel-list {padding: 2px; display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;}
+.panel-box { border-bottom: 1px solid #c8c8c8;}
+/*.panel-box:last-child {border-bottom: 1px solid #c8c8c8;}*/
+.panel-title {display: flex;flex-direction: row;justify-content: space-between; align-items: center; margin: 5px 0;}
+.panel-title-idx {max-width: 50px;overflow-x: scroll; padding: 3px 0;}
+.panel-title-idx::-webkit-scrollbar {display: none;}
+.panel-title-name {flex-grow: 1;overflow-x: scroll; padding: 3px 0; margin-left: 8px;}
+.panel-title-name::-webkit-scrollbar {display: none;}
+.panel-title-icon {width: 50px; text-align: center; padding: 3px 0;font-size: 20px; font-weight: 200;}
+.panel-title-icon img {width: 13px; height: 13px}
+.panel-body {margin-top: 3px; margin-left: 5px; padding-left: 5px;}
+.panel-footer {padding: 5px;display: none;}
+
+.hide {display: none;}

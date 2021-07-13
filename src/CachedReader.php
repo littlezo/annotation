@@ -14,6 +14,7 @@ declare(strict_types=1);
  * @license  https://github.com/littlezo/MozillaPublicLicense/blob/main/LICENSE
  *
  */
+
 namespace littler\annotation;
 
 use Doctrine\Common\Annotations\Reader;
@@ -177,7 +178,7 @@ class CachedReader implements Reader
 		if (null === $lastModification = $this->getLastModification($class)) {
 			return true;
 		}
-
+		// dd($lastModification);
 		return $this->cache->get('[C]' . $cacheKey) >= $lastModification;
 	}
 

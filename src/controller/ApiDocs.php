@@ -54,7 +54,8 @@ class ApiDocs extends BaseController
 		// dd($docs);
 		foreach ($docs as $k => $v) {
 			$mark .= '> 接口地址： http://' . $host . '  Or  ' . 'https://' . $host . PHP_EOL;
-			$mark .= '> 接口前缀: /' . $this->char($k) . PHP_EOL;
+			$mark .= '> websocket ws://' . $host . '  Or  ' . 'wss://' . $host . PHP_EOL;
+			$mark .= '> http 接口前缀: /' . $this->char($k) . PHP_EOL;
 			$mark .= '' . PHP_EOL;
 			if ($k !== 'admin') {
 				// continue;
@@ -71,7 +72,7 @@ class ApiDocs extends BaseController
 						$mark .= ' >  ' . PHP_EOL;
 						$mark .= ' >   |    请求类型    |    路径    |   是否需要授权   |     授权方式     |' . PHP_EOL;
 						$mark .= ' >   | :--------: | :--------: | :--------: | :--------: | :--------: |' . PHP_EOL;
-						$mark .= ' >   | ' . $method['method']??'' . ' | ' . $method['path'] . ' | ' . $auth . ' | Header |' . PHP_EOL;
+						$mark .= ' >   | ' . $method['method'] . ' | ' . $method['path'] . ' | ' . $auth . ' | Header |' . PHP_EOL;
 						$mark .= ' >  ' . PHP_EOL;
 						$mark .= '  >   Headers ' . PHP_EOL;
 						$mark .= '```json' . PHP_EOL;

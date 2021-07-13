@@ -57,9 +57,9 @@ trait InteractsWithDocs
 	 */
 	protected function registerAnnotationDocs()
 	{
-		$this->app->event->listen(HttpRun::class, function () {
-			Cache::set('apiDocs', $this->parseDocs($this->getClassMap()));
-		});
+		// $this->app->event->listen(HttpRun::class, function () {
+		Cache::set('apiDocs', $this->parseDocs($this->getClassMap()));
+		// });
 	}
 
 	protected function parseDocs($class_map)

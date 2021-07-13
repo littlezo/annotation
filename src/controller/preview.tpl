@@ -207,10 +207,10 @@ document.addEventListener("DOMContentLoaded", function () {
                style:"dracula",
                lineNumber:true,
             },
-            theme:{
-                current:"dark",
-                path:"https://cdn.jsdelivr.net/npm/vditor@3.8.6/dist/css/content-theme"
-            },
+          //  theme:{
+            //    current:"dark",
+           //     path:"https://cdn.jsdelivr.net/npm/vditor@3.8.6/dist/css/content-theme"
+           // },
             speech: {
               enable: true,
             },

@@ -46,8 +46,8 @@ class Service extends \think\Service
 
 		//模型注解方法提示
 		$this->detectModelAnnotations();
-		// dd($this);
-        // 注册 api文档
+		// dd($this); RouteLoaded
+		// 注册 api文档
 		$this->registerAnnotationDocs();
 	}
 

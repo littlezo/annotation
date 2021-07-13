@@ -21,6 +21,7 @@ use Doctrine\Common\Annotations\Reader;
 use PhpDocReader\PhpDocReader;
 use ReflectionObject;
 use think\App;
+use think\event\AppInit;
 
 /**
  * Trait InteractsWithInject.
@@ -43,6 +44,7 @@ trait InteractsWithInject
 
 	protected function autoInject()
 	{
+		// $this->app->event->listen(AppInit::class, function () {
 		if ($this->app->config->get('annotation.inject.enable', true)) {
 			$this->app->resolving(function ($object) {
 				// dd($this->isInjectClass(get_class($object)));
@@ -81,6 +83,7 @@ trait InteractsWithInject
 				// }
 			});
 		}
+		// });
 	}
 
 	protected function isInjectClass($name)

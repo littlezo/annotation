@@ -65,6 +65,7 @@ trait InteractsWithDocs
 	protected function parseDocs($class_map)
 	{
 		$apiDocs = [];
+		$menu = [];
 		foreach ($class_map as $class => $path) {
 			$refClass = new ReflectionClass($class);
 			/**

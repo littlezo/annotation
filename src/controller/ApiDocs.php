@@ -128,6 +128,6 @@ class ApiDocs extends BaseController
 				$data = mb_convert_encoding($data, 'utf-8', $fileType);
 			}
 		}
-		return $data;
+		return trim_all($data);
 	}
 }

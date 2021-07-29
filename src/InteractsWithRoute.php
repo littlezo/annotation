@@ -108,7 +108,12 @@ trait InteractsWithRoute
 				/** @var Route $route */
 				if ($route = $this->reader->getMethodAnnotation($refMethod, Route::class)) {
 					//注册路由
-					$rule = $routeGroup->addRule($route->value, "{$class}@{$refMethod->getName()}", $route->method);
+					// $is_root = strpos($route->value, '^') === false;
+					if (strpos($route->value, '^')!==false) {
+						$rule = $this->route->rule(substr($route->value, 1), "{$class}@{$refMethod->getName()}", $route->method);
+					} else {
+						$rule = $routeGroup->addRule($route->value, "{$class}@{$refMethod->getName()}", $route->method);
+					}
 
 					$rule->option($route->getOptions());
 					$rule->middleware($routeMiddleware[0] ?? null, $routeMiddleware[1] ?? null);

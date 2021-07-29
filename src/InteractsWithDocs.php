@@ -65,7 +65,6 @@ trait InteractsWithDocs
 	protected function parseDocs($class_map)
 	{
 		$apiDocs = [];
-		$menu = [];
 		foreach ($class_map as $class => $path) {
 			$refClass = new ReflectionClass($class);
 			/**
@@ -97,7 +96,17 @@ trait InteractsWithDocs
 					$method_docs = [];
 					$method_docs = array_merge_many($apiMethodDocs->getRule(), $apiMethodDocs->value);
 					if ($route = $this->reader->getMethodAnnotation($refMethod, Route::class)) {
-						$method_docs['path']=$route->value;
+						$path = '';
+						if ($item['module']) {
+							$path .='/' . $item['module'];
+						}
+						if ($item['group']) {
+							$path .='/' . $item['group'];
+						}
+						if (strlen($route->value)>1) {
+							$path .=$route->value;
+						}
+						$method_docs['path']= $path;
 						$method_docs['auth']=$route->ignore_verify??false;
 						$method_docs['method']=$route->method;
 					}

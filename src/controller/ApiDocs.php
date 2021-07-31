@@ -19,9 +19,11 @@ namespace littler\annotation\controller;
 
 use littler\annotation\Route;
 use littler\BaseController;
+use littler\Utils;
 use Nette\PhpGenerator\Dumper;
 use Parsedown;
 use think\facade\Cache;
+use think\facade\Db;
 use think\Request;
 
 class ApiDocs extends BaseController
@@ -44,14 +46,16 @@ class ApiDocs extends BaseController
 	 */
 	public function api(Request $request)
 	{
+		// dd($this->fields());
+		// return;
 		$host = config('little.domain') ?: $request->header('host');
 		$param = $request->param();
 		$dumper = new Dumper();
 		$docs = Cache::get('apiDocs');
 		$mark = 'API接口文档' . PHP_EOL;
-		// $mark .= '> [字段映射](http://' . config('little.domain') . '/docs/api/fields)' . PHP_EOL;
 		$mark .= '' . PHP_EOL;
-		// dd($docs);
+		$mark .= $this->fields();
+		$mark .= '' . PHP_EOL;
 		foreach ($docs as $k => $v) {
 			$mark .= '> 接口地址： http://' . $host . '  Or  ' . 'https://' . $host . PHP_EOL;
 			$mark .= '> websocket ws://' . $host . '  Or  ' . 'wss://' . $host . PHP_EOL;
@@ -76,11 +80,11 @@ class ApiDocs extends BaseController
 						$mark .= ' >  ' . PHP_EOL;
 						$mark .= '  >   Headers ' . PHP_EOL;
 						$mark .= '```json' . PHP_EOL;
-						$mark .= json_encode($method['headers'], JSON_UNESCAPED_UNICODE) . PHP_EOL;
-						$mark .= '```' . PHP_EOL;
+						// $mark .= json_encode($method['headers'], JSON_UNESCAPED_UNICODE) . PHP_EOL;
+						// $mark .= '```json' . PHP_EOL;
 						// $mark .= '```php' . PHP_EOL;
-						// $mark .=  $dumper->dump($method['headers']) . PHP_EOL;
-						// $mark .= '```' . PHP_EOL;
+						$mark .=  $dumper->dump($method['headers']) . PHP_EOL;
+						$mark .= '```' . PHP_EOL;
 						$mark .= ' ' . PHP_EOL;
 						$mark .= ' >  ' . PHP_EOL;
 						$mark .= ' >   |    字段    |    数据类型    |   是否必填   |     释译    |    默认值   |' . PHP_EOL;
@@ -97,16 +101,19 @@ class ApiDocs extends BaseController
 						$mark .= '' . PHP_EOL;
 						$mark .= ' >  成功响应' . PHP_EOL;
 						$mark .= '```json' . PHP_EOL;
-						$mark .= json_encode($method['success'], JSON_UNESCAPED_UNICODE) . PHP_EOL;
+						// $mark .= json_encode($method['success'], JSON_UNESCAPED_UNICODE) . PHP_EOL;
+						$mark .= $dumper->dump($method['success']) . PHP_EOL;
 						$mark .= '```' . PHP_EOL;
 						// $mark .= '```php' . PHP_EOL;
 						// $mark .= $dumper->dump($method['success']) . PHP_EOL;
 						// $mark .= '```' . PHP_EOL;
-						$mark .= '' . PHP_EOL;
+						$mark .= ' ' . PHP_EOL;
 						$mark .= ' >  失败响应' . PHP_EOL;
 						$mark .= '```json' . PHP_EOL;
-						$mark .= json_encode($method['error'], JSON_UNESCAPED_UNICODE) . PHP_EOL;
+						// dd($dumper->dump($method['success']['code']));
+						$mark .=   $dumper->dump($method['error']) . PHP_EOL;
 						$mark .= '```' . PHP_EOL;
+						$mark .= ' ' . PHP_EOL;
 						// $mark .= '```php' . PHP_EOL;
 						// $mark .= $dumper->dump($method['error']) . PHP_EOL;
 						// $mark .= '```' . PHP_EOL;
@@ -120,6 +127,39 @@ class ApiDocs extends BaseController
 		return;
 	}
 
+	/**
+	 * #title 字段映射.
+	 */
+	public function fields()
+	{
+		$mark = '  ' . PHP_EOL;
+		$mark .= '# 字段映射' . PHP_EOL;
+		$mark .= '  ' . PHP_EOL;
+		// $mark = '[toc]' . PHP_EOL;
+		//提取字段
+		$tables = Db::getTables();
+		foreach ($tables as $table) {
+			$database = config('database.connections.mysql.database');
+			$sql = sprintf("Select table_name %s ,TABLE_COMMENT from INFORMATION_SCHEMA.TABLES Where table_schema = '%s' AND table_name LIKE '%s'", $table, $database, $table);
+			$table_comment = Db::query($sql);
+			$table_title = $table_comment[0]['TABLE_COMMENT'];
+			$mark .= '## ' . $table_title . PHP_EOL;
+			$mark .= '> ### ' . $this->char(Utils::tableWithoutPrefix($table)) . PHP_EOL;
+			$mark .= '' . PHP_EOL;
+			$fields = Db::getFields($table);
+			$mark .= '> ' . PHP_EOL;
+			$mark .= '> |  字段  |  类型  |  是否必填  |   默认值  | 是否主键  | 备注  |' . PHP_EOL;
+			$mark .= '> |:--------|:--------|:--------|:--------|:--------|:--------|' . PHP_EOL;
+			$mark .= '> -|-|-|-|-|-|-|-' . PHP_EOL;
+			foreach ($fields as $field) {
+				$mark .= '> | ' . $field['name'] . ' | ' . $field['type'] . ' | ' . ($field['notnull'] ? '是' : '否') . ' | ' . $field['default'] . ' | ' . ($field['primary'] ? '是' : '否') . ' | ' . $field['comment'] . ' | ' . PHP_EOL;
+			}
+			$mark .= '' . PHP_EOL;
+		}
+
+		echo $mark;
+	}
+
 	protected function char($data)
 	{
 		if (! empty($data)) {
@@ -129,5 +169,32 @@ class ApiDocs extends BaseController
 			}
 		}
 		return trim_all($data);
+	}
+
+	/**
+	 * 获取字段类型.
+	 * @param string $type 字段类型
+	 */
+	protected function getFieldType(string $type): string
+	{
+		if (strpos($type, 'set') === 0 || strpos($type, 'enum') === 0) {
+			$result = 'string';
+		} elseif (preg_match('/(double|float|decimal|real|numeric)/is', $type)) {
+			$result = 'float';
+		} elseif (preg_match('/(int|serial|bit)/is', $type)) {
+			$result = 'int';
+		} elseif (preg_match('/bool/is', $type)) {
+			$result = 'bool';
+		} elseif (strpos($type, 'timestamp') === 0) {
+			$result = 'timestamp';
+		} elseif (strpos($type, 'datetime') === 0) {
+			$result = 'datetime';
+		} elseif (strpos($type, 'date') === 0) {
+			$result = 'date';
+		} else {
+			$result = 'string';
+		}
+
+		return $result;
 	}
 }

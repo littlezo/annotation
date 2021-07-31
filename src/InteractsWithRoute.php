@@ -51,10 +51,7 @@ trait InteractsWithRoute
 		if ($this->app->config->get('annotation.route.enable', true)) {
 			$this->app->event->listen(RouteLoaded::class, function () {
 				$this->route = $this->app->route;
-				// dd($this->getAllClass());
 				$this->parse($this->getClassMap());
-				// foreach ($this->getAllClass() as $class_map) {
-				// }
 			});
 		}
 	}
@@ -108,7 +105,6 @@ trait InteractsWithRoute
 				/** @var Route $route */
 				if ($route = $this->reader->getMethodAnnotation($refMethod, Route::class)) {
 					//注册路由
-					// $is_root = strpos($route->value, '^') === false;
 					if (strpos($route->value, '^')!==false) {
 						$rule = $this->route->rule(substr($route->value, 1), "{$class}@{$refMethod->getName()}", $route->method);
 					} else {

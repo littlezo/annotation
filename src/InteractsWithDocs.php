@@ -22,7 +22,6 @@ use littler\annotation\docs\ApiDocs;
 use littler\annotation\route\Group;
 use ReflectionClass;
 use think\App;
-use think\event\HttpRun;
 use think\facade\Cache;
 
 /**
@@ -57,9 +56,7 @@ trait InteractsWithDocs
 	 */
 	protected function registerAnnotationDocs()
 	{
-		// $this->app->event->listen(HttpRun::class, function () {
 		Cache::set('apiDocs', $this->parseDocs($this->getClassMap()));
-		// });
 	}
 
 	protected function parseDocs($class_map)
@@ -105,6 +102,15 @@ trait InteractsWithDocs
 						}
 						if (strlen($route->value)>1) {
 							$path .=$route->value;
+						}
+						if (strpos($route->value, '^')!==false) {
+							$path = $route->value;
+						}
+						if (strpos($route->value, '^/api')!==false) {
+							$path = substr($route->value, 5);
+						}
+						if (strpos($route->value, '^/admin')!==false) {
+							$path = substr($route->value, 7);
 						}
 						$method_docs['path']= $path;
 						$method_docs['auth']=$route->ignore_verify??false;

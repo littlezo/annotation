@@ -14,6 +14,9 @@
     <link type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/gh/vanessa219/b3log-index@7582df6ba7d52434a3e229cdbd56a06ae62b45c6/src/css/base.css" charset="utf-8"/>
     <!-- <script src="/static/vditor.js" defer></script> -->
     <style>
+         body{
+             background:#3b3e43;
+         }
         .header {
             /* background-color: #fff; */
             box-shadow: rgba(0, 0, 0, 0.05) 0 1px 7px;
@@ -34,7 +37,7 @@
             bottom: 86px;
             overflow: auto;
             font-size: 14px;
-            color: #d1d5da;
+            color: #EEE;
             /* background-color: #fff; */
             line-height: 20px;
         }

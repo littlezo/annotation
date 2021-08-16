@@ -14,6 +14,7 @@ declare(strict_types=1);
  * @license  https://github.com/littlezo/MozillaPublicLicense/blob/main/LICENSE
  *
  */
+
 namespace littler\annotation;
 
 use Doctrine\Common\Annotations\Annotation;
@@ -52,10 +53,18 @@ trait InteractsWithModel
 		if ($this->app->config->get('annotation.model.enable', true)) {
 			Model::maker(function (Model $model) {
 				$className = get_class($model);
+
 				if (! isset($this->detected[$className])) {
 					$annotations = $this->reader->getClassAnnotations(new ReflectionClass($model));
+					// if ($className == 'little\shop\model\User') {
+					// 	dd($annotations);
+					// }
+					// dd($this->detected);
 
 					foreach ($annotations as $annotation) {
+						// if ($annotation->model == 'model("member.User")') {
+						// 	dd($annotation->model);
+						// }
 						switch (true) {
 							case $annotation instanceof HasOne:
 								$relation = function () use ($annotation) {
@@ -168,7 +177,6 @@ trait InteractsWithModel
 							unset($relation);
 						}
 					}
-
 					$this->detected[$className] = true;
 				}
 			});

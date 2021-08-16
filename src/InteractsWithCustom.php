@@ -62,10 +62,10 @@ trait InteractsWithCustom
 	protected function registerCustomClassAnnotations(\ReflectionClass $refClass, &$routeGroup)
 	{
 		if ($this->checkCustomIsEnable()) {
-			foreach ($this->custom as $decorator => $hander) {
+			foreach ($this->custom as $decorator => $handler) {
 				if ($this->reader->getClassAnnotation($refClass, $decorator)) {
 					$annotation = $this->reader->getClassAnnotation($refClass, $decorator);
-					(new $hander())->cls($refClass, $annotation, $routeGroup);
+					(new $handler())->cls($refClass, $annotation, $routeGroup);
 				} else {
 					continue;
 				}
@@ -76,10 +76,10 @@ trait InteractsWithCustom
 	protected function registerCustomMethodAnnotations(\ReflectionMethod $refMethod, &$rule)
 	{
 		if ($this->checkCustomIsEnable()) {
-			foreach ($this->custom as $decorator => $hander) {
+			foreach ($this->custom as $decorator => $handler) {
 				if ($this->reader->getMethodAnnotation($refMethod, $decorator)) {
 					$annotation = $this->reader->getMethodAnnotation($refMethod, $decorator);
-					(new $hander())->func($refMethod, $annotation, $rule);
+					(new $handler())->func($refMethod, $annotation, $rule);
 				} else {
 					continue;
 				}

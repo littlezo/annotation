@@ -26,42 +26,42 @@ use think\Config;
 
 class Service extends \think\Service
 {
-	use InteractsWithRoute;
-	use InteractsWithInject;
-	use InteractsWithModel;
-	use InteractsWithDocs;
+    use InteractsWithRoute;
+    use InteractsWithInject;
+    use InteractsWithModel;
+    use InteractsWithDocs;
 
-	/** @var Reader */
-	protected $reader;
+    /** @var Reader */
+    protected $reader;
 
-	public function boot(Reader $reader)
-	{
-		$this->reader = $reader;
+    public function boot(Reader $reader)
+    {
+        $this->reader = $reader;
 
-		//注解路由
-		$this->registerAnnotationRoute();
+        //注解路由
+        $this->registerAnnotationRoute();
 
-		//自动注入
-		$this->autoInject();
+        //自动注入
+        $this->autoInject();
 
-		//模型注解方法提示
-		$this->detectModelAnnotations();
-		// dd($this); RouteLoaded
-		// 注册 api文档
-		$this->registerAnnotationDocs();
-	}
+        //模型注解方法提示
+        $this->detectModelAnnotations();
+        // dd($this); RouteLoaded
+        // 注册 api文档
+        $this->registerAnnotationDocs();
+    }
 
-	public function register()
-	{
-		AnnotationReader::addGlobalIgnoredName('mixin');
+    public function register()
+    {
+        AnnotationReader::addGlobalIgnoredName('mixin');
 
-		// TODO: this method is deprecated and will be removed in doctrine/annotations 2.0
-		AnnotationRegistry::registerLoader('class_exists');
+        // TODO: this method is deprecated and will be removed in doctrine/annotations 2.0
+        AnnotationRegistry::registerLoader('class_exists');
 
-		$this->app->bind(Reader::class, function (App $app, Config $config, Cache $cache) {
-			$store = $config->get('annotation.store');
+        $this->app->bind(Reader::class, function (App $app, Config $config, Cache $cache) {
+            $store = $config->get('annotation.store');
 
-			return new CachedReader(new AnnotationReader(), $cache->store($store), $app->isDebug());
-		});
-	}
+            return new CachedReader(new AnnotationReader(), $cache->store($store), $app->isDebug());
+        });
+    }
 }

@@ -2,7 +2,8 @@
 
 declare(strict_types=1);
 
-/**
+/***
+ *
  * #logic 做事不讲究逻辑，再努力也只是重复犯错
  * ## 何为相思：不删不聊不打扰，可否具体点：曾爱过。何为遗憾：你来我往皆过客，可否具体点：再无你。
  * ## 只要思想不滑稽，方法总比苦难多！
@@ -14,28 +15,17 @@ declare(strict_types=1);
  * @license  https://github.com/littlezo/MozillaPublicLicense/blob/main/LICENSE
  *
  */
-namespace littler\annotation\command\make;
 
-use think\console\command\Make;
+namespace littler\annotation\docs;
 
-class Annotation extends Make
+use Doctrine\Common\Annotations\Annotation;
+
+/**
+ * api 定义.
+ *
+ * @Annotation
+ * @Target({"CLASS", "METHOD"})
+ */
+final class ApiGroup extends GroupItem
 {
-	protected $type = 'Annotation';
-
-	protected function configure()
-	{
-		parent::configure();
-		$this->setName('annotation:class')
-			->setDescription('Create a new annotation class');
-	}
-
-	protected function getStub(): string
-	{
-		return __DIR__ . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR . 'annotation.plain.stub';
-	}
-
-	protected function getNamespace(string $app): string
-	{
-		return parent::getNamespace($app) . '\\annotation';
-	}
 }

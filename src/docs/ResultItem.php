@@ -19,12 +19,40 @@ namespace littler\annotation\docs;
 
 use Doctrine\Common\Annotations\Annotation;
 
-/**
- * api 文档.
- *
- * @Annotation
- * @Target({"CLASS", "METHOD"})
- */
-final class ApiDocs extends Rule
+abstract class ResultItem extends Annotation
 {
+    /**
+     * 字段.
+     *
+     * @var string
+     */
+    public $field;
+
+    /**
+     * 名称.
+     *
+     * @var string
+     */
+    public $name;
+
+    /**
+     * 类型.
+     *
+     * @var string
+     */
+    public $type;
+
+    /**
+     * 描述.
+     *
+     * @var string
+     */
+    public $desc;
+
+    public function getResult()
+    {
+        return array_intersect_key(get_object_vars($this), array_flip([
+            'field', 'name', 'type', 'desc',
+        ]));
+    }
 }

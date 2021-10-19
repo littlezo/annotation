@@ -18,54 +18,20 @@ declare(strict_types=1);
 namespace littler\annotation\docs;
 
 use Doctrine\Common\Annotations\Annotation;
-use Doctrine\Common\Annotations\Annotation\Enum;
 use Doctrine\Common\Annotations\Annotation\Target;
 
-if (!defined('TIME')) {
-    define('TIME', time());
-}
-
 /**
- * api 文档.
+ * api header.
  *
  * @Annotation
- * @Target({"METHOD"})
+ * @Target({"ANNOTATION"})
  */
-final class ApiSuccess extends ReturnItem
+final class ApiHeaderItem extends HeaderItem
 {
-    /**
-     * 状态码.
-     *
-     * @var int
-     */
-    public $code = 200;
-
-    /**
-     * 返回类型.
-     *
-     * @Enum({"success","error","fail","notice","tips"})
-     *
-     * @var string
-     */
-    public $type = 'success';
-    /**
-     * 返回提示.
-     *
-     * @var string
-     */
-    public $message = '操作成功';
-
-    /**
-     * 时间戳.
-     *
-     * @var int
-     */
-    public $timestamp = TIME;
-
     /**
      * 返回值
      *
      * @var object|array|string|int|float|bool|null
      */
-    public $value = [];
+    public $value = null;
 }

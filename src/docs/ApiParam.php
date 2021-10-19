@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace littler\annotation\docs;
 
 use Doctrine\Common\Annotations\Annotation;
+use Doctrine\Common\Annotations\Annotation\Target;
 
 /**
  * api 参数.
@@ -25,6 +26,12 @@ use Doctrine\Common\Annotations\Annotation;
  * @Annotation
  * @Target({"METHOD"})
  */
-final class ApiParam extends ParamItem
+final class ApiParam extends Annotation
 {
+    /**
+     * 返回值
+     *
+     * @var object|array|string|int|float|bool|null
+     */
+    public $value = [];
 }

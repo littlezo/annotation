@@ -18,6 +18,8 @@ declare(strict_types=1);
 namespace littler\annotation\docs;
 
 use Doctrine\Common\Annotations\Annotation;
+use Doctrine\Common\Annotations\Annotation\Enum;
+use Doctrine\Common\Annotations\Annotation\Target;
 
 /**
  * api 定义.
@@ -27,4 +29,18 @@ use Doctrine\Common\Annotations\Annotation;
  */
 final class ApiDefine extends ApiItem
 {
+    /**
+     * 请求方式.
+     *
+     * @Enum({"GET","POST","PUT","DELETE","PATCH","OPTIONS","HEAD"})
+     *
+     * @var string
+     */
+    public $method = '*';
+    /**
+     * 返回值
+     *
+     * @var string
+     */
+    public $value = null;
 }

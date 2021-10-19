@@ -19,13 +19,36 @@ declare(strict_types=1);
 namespace littler\annotation\docs;
 
 use Doctrine\Common\Annotations\Annotation;
+use Doctrine\Common\Annotations\Annotation\Enum;
+use Doctrine\Common\Annotations\Annotation\Target;
 
 /**
- * api 定义.
+ * api 组.
  *
  * @Annotation
- * @Target({"CLASS", "METHOD"})
+ * @Target({"CLASS"})
  */
 final class ApiGroup extends GroupItem
 {
+    /**
+     * 名称.
+     *
+     * @var string
+     */
+    public $app_name = 'api';
+
+    /**
+     * 名称.
+     *
+     * @var string
+     */
+    public $app_title = '前端接口';
+    /**
+     * 请求类型.
+     *
+     * @Enum({"CLASS"})
+     *
+     * @var string
+     */
+    public $type = 'CLASS';
 }

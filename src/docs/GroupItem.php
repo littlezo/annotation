@@ -25,28 +25,48 @@ use Doctrine\Common\Annotations\Annotation;
 abstract class GroupItem extends Annotation
 {
     /**
-     * 字段.
+     * 应用名称.
      *
      * @var string
      */
-    public $field;
+    public $app_name;
 
     /**
-     * 名称.
+     * 应用标题.
+     *
+     * @var string
+     */
+    public $app_title;
+
+    /**
+     * 模块名称.
+     *
+     * @var string
+     */
+    public $module_name;
+
+    /**
+     * 模块标题.
+     *
+     * @var string
+     */
+    public $module_title;
+
+    /**
+     * 组名称.
      *
      * @var string
      */
     public $name;
-
     /**
-     * 类型.
+     * 组标题.
      *
      * @var string
      */
-    public $type;
+    public $title;
 
     /**
-     * 描述.
+     * 组描述.
      *
      * @var string
      */
@@ -55,7 +75,7 @@ abstract class GroupItem extends Annotation
     public function getResult()
     {
         return array_intersect_key(get_object_vars($this), array_flip([
-            'field', 'name', 'type', 'desc',
+           'app_name', 'app_title',  'module_name', 'module_title', 'name', 'title', 'desc',
         ]));
     }
 }

@@ -43,7 +43,7 @@ class Service extends \think\Service
 
         //自动注入
         $this->autoInject();
-
+        // dd($this);
         //模型注解方法提示
         $this->detectModelAnnotations();
         // dd($this); RouteLoaded

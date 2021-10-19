@@ -51,17 +51,10 @@ abstract class ReturnItem extends Annotation
      */
     public $timestamp;
 
-    /**
-     * 返回数据.
-     *
-     * @var array|string|int|null
-     */
-    public $result;
-
     public function getResult()
     {
         return array_intersect_key(get_object_vars($this), array_flip([
-            'code', 'type', 'message', 'timestamp', 'result',
+            'code', 'type', 'message', 'timestamp',
         ]));
     }
 }

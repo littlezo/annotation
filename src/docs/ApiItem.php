@@ -38,8 +38,6 @@ abstract class ApiItem extends Annotation
     /**
      * 请求方式.
      *
-     * @Enum({"GET","POST","PUT","DELETE","PATCH","OPTIONS","HEAD"})
-     *
      * @var string
      */
     public $method;
@@ -68,7 +66,7 @@ abstract class ApiItem extends Annotation
     public function getResult()
     {
         return array_intersect_key(get_object_vars($this), array_flip([
-            'code', 'type', 'message', 'timestamp', 'result',
+            'name', 'version', 'method', 'verify', 'permission', 'desc',
         ]));
     }
 }

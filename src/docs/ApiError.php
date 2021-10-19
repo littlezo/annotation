@@ -18,6 +18,12 @@ declare(strict_types=1);
 namespace littler\annotation\docs;
 
 use Doctrine\Common\Annotations\Annotation;
+use Doctrine\Common\Annotations\Annotation\Enum;
+use Doctrine\Common\Annotations\Annotation\Target;
+
+if (!defined('TIME')) {
+    define('TIME', time());
+}
 
 /**
  * api 异常返回.
@@ -27,4 +33,39 @@ use Doctrine\Common\Annotations\Annotation;
  */
 final class ApiError extends ReturnItem
 {
+    /**
+     * 状态码.
+     *
+     * @var int
+     */
+    public $code = -1;
+
+    /**
+     * 返回类型.
+     *
+     * @Enum({"success","error","fail","notice","tips"})
+     *
+     * @var string
+     */
+    public $type = 'fail';
+    /**
+     * 返回提示.
+     *
+     * @var string
+     */
+    public $message = '操作失败';
+
+    /**
+     * 时间戳.
+     *
+     * @var int
+     */
+    public $timestamp = TIME;
+
+    /**
+     * 返回值
+     *
+     * @var object|array|string|int|float|bool|null
+     */
+    public $value = [];
 }

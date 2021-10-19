@@ -23,6 +23,7 @@ namespace littler\annotation;
 use Doctrine\Common\Annotations\Reader;
 use littler\annotation\docs\ApiDefine;
 use littler\annotation\docs\ApiError;
+use littler\annotation\docs\ApiGroup;
 use littler\annotation\docs\ApiHeader;
 use littler\annotation\docs\ApiParam;
 use littler\annotation\docs\ApiSuccess;
@@ -57,6 +58,21 @@ function array_merge_many($a1, $a2)
 
     return $arr;
 }
+
+function object_to_array($array)
+{
+    if (is_object($array)) {
+        $array = (array) $array;
+    }
+    if (is_array($array)) {
+        foreach ($array as $key => $value) {
+            $array[$key] = object_to_array($value);
+        }
+    }
+
+    return $array;
+}
+
 trait InteractsWithDocs
 {
     use InteractsWithCustom;
@@ -66,12 +82,14 @@ trait InteractsWithDocs
      */
     protected function registerAnnotationDocs()
     {
-        Cache::set('apiDocs', $this->parses($this->getClassMap()));
+        Cache::clear();
+        Cache::set('apiList', $this->parses($this->getClassMap()));
     }
 
     protected function parses($class_map)
     {
-        $apiDocs = [];
+        // dd($class_map);
+        $apiList = [];
         foreach ($class_map as $class => $path) {
             $refClass = new ReflectionClass($class);
             /**
@@ -79,10 +97,16 @@ trait InteractsWithDocs
              *
              * @var ApiDocs $apiClassDocs
              */
-            $item = [];
-            if ($apiClassDefine = $this->reader->getClassAnnotation($refClass, ApiDefine::class)) {
-                dd($apiClassDefine);
+            $item = [
+                'group' => [],
+                'methods' => [],
+            ];
+
+            $group = $this->reader->getClassAnnotation($refClass, ApiGroup::class);
+            if (!$group) {
+                continue;
             }
+            $item['group'] = object_to_array($group ?? []);
             /***
              *
              * 方法文档
@@ -93,11 +117,27 @@ trait InteractsWithDocs
                 $param = $this->reader->getMethodAnnotation($refMethod, ApiParam::class);
                 $success = $this->reader->getMethodAnnotation($refMethod, ApiSuccess::class);
                 $error = $this->reader->getMethodAnnotation($refMethod, ApiError::class);
-                dd($define, $header, $param, $success, $error);
+                if (!$define || !$header || !$param || !$success || !$error) {
+                    // dd($refMethod, $refClass, $success);
+                    continue;
+                }
+                $item['methods'][] =
+                    // 'group' => object_to_array($group->value),
+                    [
+                        'define' => object_to_array($define ?: []),
+                        'header' => object_to_array($header?->value ?: []),
+                        'param' => object_to_array($param?->value ?: []),
+                        'success' => object_to_array($success ?: []),
+                        'error' => object_to_array($error ?: []),
+                    ];
+            }
+
+            if (!is_null($item)) {
+                $apiList[] = $item;
             }
         }
-        // dd($apiDocs);
+        // dd($apiList);
 
-        return $apiDocs;
+        return $apiList;
     }
 }

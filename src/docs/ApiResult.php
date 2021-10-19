@@ -18,13 +18,30 @@ declare(strict_types=1);
 namespace littler\annotation\docs;
 
 use Doctrine\Common\Annotations\Annotation;
+use Doctrine\Common\Annotations\Annotation\Enum;
+use Doctrine\Common\Annotations\Annotation\Target;
 
 /**
  * api 返回列.
  *
  * @Annotation
- * Target({"METHOD"})
+ * Target({"METHOD","ANNOTATION"})
  */
 final class ApiResult extends ResultItem
 {
+    /**
+     * 数据类型.
+     *
+     * @Enum({"array","string","int","null","bool","float","object"})
+     *
+     * @var string
+     */
+    public $type;
+
+    /**
+     * 返回值
+     *
+     * @var object|array|string|int|float|bool|null
+     */
+    public $value = [];
 }

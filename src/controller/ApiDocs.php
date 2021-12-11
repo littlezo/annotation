@@ -15,10 +15,10 @@ declare(strict_types=1);
  *
  */
 
-namespace littler\annotation\controller;
+namespace littler\controller;
 
 use app\BaseController;
-use littler\annotation\Route;
+use littler\Route;
 use littler\Utils;
 use Nette\PhpGenerator\Dumper;
 use Parsedown;

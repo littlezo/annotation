@@ -14,7 +14,7 @@ declare(strict_types=1);
  * @license  https://github.com/littlezo/MozillaPublicLicense/blob/main/LICENSE
  *
  */
-namespace littler\annotation\model\relation;
+namespace littler\model\relation;
 
 use Doctrine\Common\Annotations\Annotation;
 

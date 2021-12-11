@@ -1,38 +1,44 @@
 {
-  "name": "littler/think-annotation",
-  "description": "Annotation For ThinkPHP6",
-  "license": "MPL-2.0",
-  "authors": [
-    {
-      "name": "@小小只^v^",
-      "email": "littlezov@qq.com"
+    "name": "littler/think-annotation",
+    "description": "Annotation For ThinkPHP6",
+    "license": "MPL-2.0",
+    "authors": [
+        {
+            "name": "@小小只^v^",
+            "email": "littlezov@qq.com"
+        }
+    ],
+    "require": {
+        "topthink/framework": "^6.0",
+        "doctrine/annotations": "^1.0",
+        "php-di/phpdoc-reader": "^2.0",
+        "symfony/class-loader": "^3.0",
+        "erusev/parsedown": "^1.0",
+        "symfony/finder": "^5.3",
+        "nette/php-generator": "^3.6"
+    },
+    "require-dev": {
+        "topthink/think-ide-helper": "^v1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "littler\\annotation\\": "src"
+        }
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../../*/*"
+        }
+    ],
+    "extra": {
+        "think": {
+            "services": [
+                "littler\\AnnotationService"
+            ],
+            "config": {
+                "annotation": "src/config.php"
+            }
+        }
     }
-  ],
-  "require": {
-    "topthink/framework": "^6.0",
-    "doctrine/annotations": "^1.0",
-    "php-di/phpdoc-reader": "^2.0",
-    "symfony/class-loader": "^3.0",
-    "erusev/parsedown": "^1.0",
-    "symfony/finder": "^5.3",
-    "nette/php-generator": "^3.6"
-  },
-  "require-dev": {
-    "topthink/think-ide-helper": "^v1.0"
-  },
-  "autoload": {
-    "psr-4": {
-      "littler\\annotation\\": "src"
-    }
-  },
-  "extra": {
-    "think": {
-      "services": [
-        "littler\\annotation\\Service"
-      ],
-      "config": {
-        "annotation": "src/config.php"
-      }
-    }
-  }
 }

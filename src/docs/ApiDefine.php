@@ -15,7 +15,7 @@ declare(strict_types=1);
  *
  */
 
-namespace littler\annotation\docs;
+namespace littler\docs;
 
 use Doctrine\Common\Annotations\Annotation;
 use Doctrine\Common\Annotations\Annotation\Enum;

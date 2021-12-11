@@ -15,7 +15,7 @@ declare(strict_types=1);
  *
  */
 
-namespace littler\annotation\route;
+namespace littler\route;
 
 use Doctrine\Common\Annotations\Annotation;
 

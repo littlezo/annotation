@@ -15,7 +15,7 @@ declare(strict_types=1);
  *
  */
 
-namespace littler\annotation;
+namespace littler;
 
 use Doctrine\Common\Annotations\Reader;
 use PhpDocReader\PhpDocReader;

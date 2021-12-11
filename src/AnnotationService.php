@@ -15,7 +15,7 @@ declare(strict_types=1);
  *
  */
 
-namespace littler\annotation;
+namespace littler;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
@@ -24,7 +24,7 @@ use think\App;
 use think\Cache;
 use think\Config;
 
-class Service extends \think\Service
+class AnnotationService extends \think\Service
 {
     use InteractsWithRoute;
     use InteractsWithInject;

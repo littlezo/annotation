@@ -14,12 +14,12 @@ declare(strict_types=1);
  * @license  https://github.com/littlezo/MozillaPublicLicense/blob/main/LICENSE
  *
  */
-namespace littler\annotation;
+namespace littler;
 
 use Doctrine\Common\Annotations\Annotation;
 use Doctrine\Common\Annotations\Annotation\Enum;
 use Doctrine\Common\Annotations\Annotation\Target;
-use littler\annotation\route\Rule;
+use littler\route\Rule;
 
 /**
  * 注册路由.

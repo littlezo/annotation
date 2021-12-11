@@ -14,7 +14,7 @@ declare(strict_types=1);
  * @license  https://github.com/littlezo/MozillaPublicLicense/blob/main/LICENSE
  *
  */
-namespace littler\annotation\command\make;
+namespace littler\command\make;
 
 use think\console\command\Make;
 

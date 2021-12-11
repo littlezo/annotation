@@ -15,14 +15,14 @@ declare(strict_types=1);
  *
  */
 
-namespace littler\annotation;
+namespace littler;
 
 use Doctrine\Common\Annotations\Reader;
-use littler\annotation\route\Group;
-use littler\annotation\route\Middleware;
-use littler\annotation\route\Model;
-use littler\annotation\route\Resource as Resources;
-use littler\annotation\route\Validate;
+use littler\route\Group;
+use littler\route\Middleware;
+use littler\route\Model;
+use littler\route\Resource as Resources;
+use littler\route\Validate;
 use ReflectionClass;
 use ReflectionMethod;
 use think\App;

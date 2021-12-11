@@ -18,7 +18,7 @@ declare(strict_types=1);
  * @license  https://github.com/littlezo/MozillaPublicLicense/blob/main/LICENSE
  */
 
-namespace littler\annotation\docs;
+namespace littler\docs;
 
 use Doctrine\Common\Annotations\Annotation;
 

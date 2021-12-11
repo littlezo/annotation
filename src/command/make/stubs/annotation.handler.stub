@@ -4,7 +4,7 @@ declare (strict_types = 1);
 namespace {%namespace%};
 
 use Doctrine\Common\Annotations\Annotation;
-use littler\annotation\handler\Handler;
+use littler\handler\Handler;
 
 final class {%className%} extends Handler
 {

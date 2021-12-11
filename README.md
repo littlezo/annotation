@@ -15,11 +15,11 @@
 
 namespace app\controller;
 
-use littler\annotation\Inject;
-use littler\annotation\Route;
-use littler\annotation\route\Group;
-use littler\annotation\route\Middleware;
-use littler\annotation\route\Resource;
+use littler\Inject;
+use littler\Route;
+use littler\route\Group;
+use littler\route\Middleware;
+use littler\route\Resource;
 use think\Cache;
 use think\middleware\SessionInit;
 
@@ -76,8 +76,8 @@ class IndexController
   return [
       // 指令定义
       'commands' => [
-          \littler\annotation\command\Annotation::class,
-          \littler\annotation\command\Handler::class
+          \littler\command\Annotation::class,
+          \littler\command\Handler::class
       ],
   ];
   ```
@@ -131,7 +131,7 @@ class IndexController
   namespace app\annotation\handler;
 
   use Doctrine\Common\Annotations\Annotation;
-  use littler\annotation\handler\Handler;
+  use littler\handler\Handler;
 
   class User extends Handler
   {

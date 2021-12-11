@@ -15,7 +15,7 @@ declare(strict_types=1);
  *
  */
 
-namespace littler\annotation\command\make;
+namespace littler\command\make;
 
 use think\console\command\Make;
 

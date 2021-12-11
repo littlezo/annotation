@@ -18,15 +18,15 @@ declare(strict_types=1);
  * @license  https://github.com/littlezo/MozillaPublicLicense/blob/main/LICENSE
  */
 
-namespace littler\annotation;
+namespace littler;
 
 use Doctrine\Common\Annotations\Reader;
-use littler\annotation\docs\ApiDefine;
-use littler\annotation\docs\ApiError;
-use littler\annotation\docs\ApiGroup;
-use littler\annotation\docs\ApiHeader;
-use littler\annotation\docs\ApiParam;
-use littler\annotation\docs\ApiSuccess;
+use littler\docs\ApiDefine;
+use littler\docs\ApiError;
+use littler\docs\ApiGroup;
+use littler\docs\ApiHeader;
+use littler\docs\ApiParam;
+use littler\docs\ApiSuccess;
 use ReflectionClass;
 use think\App;
 use think\facade\Cache;

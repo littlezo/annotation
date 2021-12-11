@@ -15,21 +15,21 @@ declare(strict_types=1);
  *
  */
 
-namespace littler\annotation;
+namespace littler;
 
 use Doctrine\Common\Annotations\Annotation;
 use Doctrine\Common\Annotations\Reader;
-use littler\annotation\model\relation\BelongsTo;
-use littler\annotation\model\relation\BelongsToMany;
-use littler\annotation\model\relation\HasMany;
-use littler\annotation\model\relation\HasManyThrough;
-use littler\annotation\model\relation\HasOne;
-use littler\annotation\model\relation\HasOneThrough;
-use littler\annotation\model\relation\MorphByMany;
-use littler\annotation\model\relation\MorphMany;
-use littler\annotation\model\relation\MorphOne;
-use littler\annotation\model\relation\MorphTo;
-use littler\annotation\model\relation\MorphToMany;
+use littler\model\relation\BelongsTo;
+use littler\model\relation\BelongsToMany;
+use littler\model\relation\HasMany;
+use littler\model\relation\HasManyThrough;
+use littler\model\relation\HasOne;
+use littler\model\relation\HasOneThrough;
+use littler\model\relation\MorphByMany;
+use littler\model\relation\MorphMany;
+use littler\model\relation\MorphOne;
+use littler\model\relation\MorphTo;
+use littler\model\relation\MorphToMany;
 use ReflectionClass;
 use think\App;
 use think\helper\Str;

@@ -43,12 +43,13 @@ class Service extends \think\Service
 
         //自动注入
         $this->autoInject();
-        // dd($this);
+
         //模型注解方法提示
         $this->detectModelAnnotations();
         // dd($this); RouteLoaded
         // 注册 api文档
         $this->registerAnnotationDocs();
+        // dd($this);
     }
 
     public function register()

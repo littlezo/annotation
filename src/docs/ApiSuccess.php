@@ -68,4 +68,13 @@ final class ApiSuccess extends ReturnItem
      * @var object|array|string|int|float|bool|null
      */
     public $value = [];
+
+    // public function getValue()
+    // {
+    //     dd($this);
+
+    //     return array_intersect_key(get_object_vars($this), array_flip([
+    //         'value',
+    //     ]));
+    // }
 }

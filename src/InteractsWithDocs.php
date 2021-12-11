@@ -116,6 +116,8 @@ trait InteractsWithDocs
                 $header = $this->reader->getMethodAnnotation($refMethod, ApiHeader::class);
                 $param = $this->reader->getMethodAnnotation($refMethod, ApiParam::class);
                 $success = $this->reader->getMethodAnnotation($refMethod, ApiSuccess::class);
+                // dd();
+                // $success->getValue();
                 $error = $this->reader->getMethodAnnotation($refMethod, ApiError::class);
                 if (!$define || !$header || !$param || !$success || !$error) {
                     // dd($refMethod, $refClass, $success);
